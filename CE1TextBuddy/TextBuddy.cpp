@@ -1,4 +1,4 @@
-// CE1TextBuddy.cpp:
+// TextBuddy.cpp:
 // TextBuddy is used to store, retrieve and delete lines in a textfile. 
 // The command format is given by the example interaction below:
 //
@@ -21,14 +21,9 @@
 // author: Yeow Li Teng Cheryl 
 
 #include "stdafx.h"
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <algorithm>
+#include "TextBuddy.h"
 
 using namespace std;
-
-enum CommandType { ADD_LINE = 0, DISPLAY_ALL = 1, DELETE_LINE = 2, CLEAR_ALL = 3, EXIT = 4, INVALID = 5};
 
 const string MESSAGE_EMPTY = "%s is empty";
 const string MESSAGE_ADDED = "added to %s: \"%s\"";
@@ -40,25 +35,10 @@ const string WELCOME_MESSAGE = "Welcome to TextBuddy. %s is ready for use";
 const string ERROR_UNRECOGNISED_COMMAND_TYPE = "ERROR: Unrecognised command type.\n1. add <text>\n2. delete <line number>\n3. clear all\n4. display all\n";
 const string ERROR_USAGE = "ERROR: Usage: textbuddy.exe <filename>.txt";
 
-char buffer[255];
-
-string executeCommand(string filename, string userCommand);
-
-string addLine(string filename, string content);
-string displayAll(string filename);
-string deleteLine(string filename, string content);
-string clearAll(string filename);
-
-CommandType determineCommandType(string command);
-string removeFirstWord(string command);
-string getFirstWord(string command);
-void showToUser(string text);
-
-
-int main(int argc, char* argv[]) {
+void TextBuddy::main(int argc, char* argv[]) {
 	string filename;
 
-	if (argc != 2) { 
+	if (argc != 2) {
 		// if the command line input is wrong, generates an error message and terminates the program.
 		showToUser(ERROR_USAGE);
 		showToUser(MESSAGE_PROGRAM_TERMINATION);
@@ -80,10 +60,10 @@ int main(int argc, char* argv[]) {
 		showToUser(feedback);
 	}
 
-	return 0;
+	return;
 }
 
-string executeCommand(string filename, string userCommand) {
+string TextBuddy::executeCommand(string filename, string userCommand) {
 	CommandType command;
 	string content;
 
@@ -92,36 +72,36 @@ string executeCommand(string filename, string userCommand) {
 
 
 	switch (command) {
-		case ADD_LINE:
-			return addLine(filename, content);
+	case ADD_LINE:
+		return addLine(filename, content);
 
-		case DISPLAY_ALL:
-			return displayAll(filename);
+	case DISPLAY_ALL:
+		return displayAll(filename);
 
-		case DELETE_LINE:
-			return deleteLine(filename, content);
+	case DELETE_LINE:
+		return deleteLine(filename, content);
 
-		case CLEAR_ALL:
-			return clearAll(filename);
+	case CLEAR_ALL:
+		return clearAll(filename);
 
-		case EXIT:
-			exit(0);
+	case EXIT:
+		exit(0);
 
-		case INVALID:
-			sprintf_s(buffer, MESSAGE_INVALID_FORMAT.c_str(), userCommand.c_str());
-			return buffer;
+	case INVALID:
+		sprintf_s(buffer, MESSAGE_INVALID_FORMAT.c_str(), userCommand.c_str());
+		return buffer;
 
-		default:
-			showToUser(ERROR_UNRECOGNISED_COMMAND_TYPE);
-			showToUser(MESSAGE_PROGRAM_TERMINATION);
+	default:
+		showToUser(ERROR_UNRECOGNISED_COMMAND_TYPE);
+		showToUser(MESSAGE_PROGRAM_TERMINATION);
 
-			getchar();
-			exit(EXIT_FAILURE);
+		getchar();
+		exit(EXIT_FAILURE);
 	}
 
 }
 
-string addLine(string filename, string content) {
+string TextBuddy::addLine(string filename, string content) {
 	ofstream file;
 
 	file.open(filename, ios::app);
@@ -133,7 +113,7 @@ string addLine(string filename, string content) {
 	return buffer;
 }
 
-string displayAll(string filename) {
+string TextBuddy::displayAll(string filename) {
 	ifstream file;
 	string line;
 	int i;
@@ -154,7 +134,7 @@ string displayAll(string filename) {
 	return "";
 }
 
-string deleteLine(string filename, string content) {
+string TextBuddy::deleteLine(string filename, string content) {
 	ofstream newFile;
 	ifstream oldFile;
 	string tempLine;
@@ -184,7 +164,7 @@ string deleteLine(string filename, string content) {
 	return buffer;
 }
 
-string clearAll(string filename) {
+string TextBuddy::clearAll(string filename) {
 	ifstream file;
 
 	file.open("temp.txt");
@@ -197,7 +177,7 @@ string clearAll(string filename) {
 	return buffer;
 }
 
-CommandType determineCommandType(string command) {
+TextBuddy::CommandType TextBuddy::determineCommandType(string command) {
 	transform(command.begin(), command.end(), command.begin(), ::tolower);
 
 	if (command == "add"){
@@ -219,14 +199,19 @@ CommandType determineCommandType(string command) {
 		return CommandType::INVALID;
 }
 
-string removeFirstWord(string command){
-	return command.substr(command.find_first_of(" ")+1);
+string TextBuddy::removeFirstWord(string command){
+	return command.substr(command.find_first_of(" ") + 1);
 }
 
-string getFirstWord(string command){
+string TextBuddy::getFirstWord(string command){
 	return command.substr(0, command.find(' '));
 }
 
-void showToUser(string text) {
+void TextBuddy::showToUser(string text) {
 	cout << text << endl;
+}
+
+
+int main(int argc, char* argv[]) {
+	TextBuddy::main(argc, argv);
 }
