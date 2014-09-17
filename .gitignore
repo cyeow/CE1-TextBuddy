@@ -249,3 +249,7 @@ CE1TextBuddy/CE1TextBuddy.vcxproj
 CE1TextBuddy/CE1TextBuddy.vcxproj.filters
 ipch/ce1textbuddy-bcbfcba/ce1textbuddy-13125e2.ipch
 *.ipch
+CE1TextBuddy/hello.txt
+ipch/ce1textbuddy-bcbfcba/ce1textbuddy-13125e2.ipch
+TextBuddy.sln
+ipch/ce1textbuddy-bcbfcba/ce1textbuddy-13125e2.ipch
