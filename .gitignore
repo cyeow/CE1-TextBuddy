@@ -244,3 +244,7 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+CE1TextBuddy.sln
+CE1TextBuddy/CE1TextBuddy.vcxproj
+CE1TextBuddy/CE1TextBuddy.vcxproj.filters
+ipch/ce1textbuddy-bcbfcba/ce1textbuddy-13125e2.ipch
