@@ -198,13 +198,18 @@ string TextBuddy::sortAlphabetical(string filename) {
 
 // returns lines that contain the search word
 string TextBuddy::searchFile(string filename, string content) {
-	int i;
+	int resultNo = 0;
 
-	for (i = 1; i <= (int)store.size(); i++) {
-		printLine(i, searchLine(filename, content, to_string(i)));
+	for (int i = 1; i <= (int)store.size(); i++) {
+		string result;
+		result = searchLine(filename, content, to_string(i));
+		if (result != "") {
+			resultNo++;
+			printLine(resultNo, result);
+		}
 	}
 
-	sprintf_s(buffer, MESSAGE_SEARCH_FOUND.c_str(), i, filename.c_str());
+	sprintf_s(buffer, MESSAGE_SEARCH_FOUND.c_str(), resultNo, filename.c_str());
 	
 	return buffer;
 }
