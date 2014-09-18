@@ -57,12 +57,15 @@ void TextBuddy::main(int argc, char* argv[]) {
 	return;
 }
 
+// receives user input and passes to executeCommand
 void TextBuddy::inputCommand(string filename){
 
 	while (true) {
 		cout << "command:";
+		
 		string userCommand;
 		getline(cin, userCommand);
+		
 		string feedback = executeCommand(filename, userCommand);
 		writeToFile(filename);
 		showToUser(feedback);
@@ -71,6 +74,7 @@ void TextBuddy::inputCommand(string filename){
 	return;
 }
 
+// parses the command and passes it to the appropriate operation
 string TextBuddy::executeCommand(string filename, string userCommand) {
 	CommandType command;
 	string content;
@@ -109,7 +113,7 @@ string TextBuddy::executeCommand(string filename, string userCommand) {
 			return buffer;
 		}
 
-		return search(filename, content);
+		return searchFile(filename, content);
 
 	case EXIT:
 		exit(0);
@@ -128,6 +132,7 @@ string TextBuddy::executeCommand(string filename, string userCommand) {
 
 }
 
+// adds a line to the text file
 string TextBuddy::addLine(string filename, string content) {
 
 	store.push_back(content);
@@ -137,6 +142,7 @@ string TextBuddy::addLine(string filename, string content) {
 	return buffer;
 }
 
+// displays all content in the text file
 string TextBuddy::displayAll(string filename) {
 	ifstream file;
 	string line;
@@ -158,6 +164,7 @@ string TextBuddy::displayAll(string filename) {
 	return "";
 }
 
+// deletes a line (stated) in the text file
 string TextBuddy::deleteLine(string filename, string content) {
 
 	vector<string>::iterator i = getLineIter(filename, content);
@@ -169,6 +176,7 @@ string TextBuddy::deleteLine(string filename, string content) {
 	return buffer;
 }
 
+// deletes all content in the text file
 string TextBuddy::clearAll(string filename) {
 
 	store.clear();
@@ -178,6 +186,7 @@ string TextBuddy::clearAll(string filename) {
 	return buffer;
 }
 
+// sorts the lines in alphabetical order
 string TextBuddy::sortAlphabetical(string filename) {
 	stable_sort(store.begin(), store.end());
 
@@ -187,17 +196,27 @@ string TextBuddy::sortAlphabetical(string filename) {
 }
 
 // returns lines that contain the search word
-string TextBuddy::search(string filename, string content) {
+string TextBuddy::searchFile(string filename, string content) {
 
 	return buffer;
 }
 
 // returns content of line number IF search word is found in the line
-string TextBuddy::searchLine(string filename, string content) {
+string TextBuddy::searchLine(string filename, string content, string lineNo) {
+	string::iterator lineChecker;
 
-	return buffer;
+	vector<string>::iterator i = getLineIter(filename, lineNo);
+	lineChecker = search(i->begin(), i->end(), content.begin(), content.end());
+
+	if (i->begin() == i->end() || lineChecker == i->end()) {
+		return "";
+	}
+	else {
+		return *i;
+	}
 }
 
+// initialises the vector and *.txt 
 void TextBuddy::initStore(string filename) {
 	ifstream inFile;
 	string line;
@@ -213,6 +232,7 @@ void TextBuddy::initStore(string filename) {
 	return;
 }
 
+// transfers strings in vector to file
 void TextBuddy::writeToFile(string filename) {
 	ofstream outFile;
 	ifstream inFile;

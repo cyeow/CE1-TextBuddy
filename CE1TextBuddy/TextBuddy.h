@@ -65,9 +65,9 @@ private:
 	static string deleteLine(string filename, string content);
 	static string clearAll(string filename);
 	static string sortAlphabetical(string filename);
-	static string search(string filename, string content);
+	static string searchFile(string filename, string content);
 
-	static string searchLine(string filename, string content);
+	static string searchLine(string filename, string content, string lineNo);
 	static void initStore(string filename);
 	static void writeToFile(string filename);
 	static vector<string>::iterator getLineIter(string filename, string content);
