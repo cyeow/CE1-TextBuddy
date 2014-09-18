@@ -31,6 +31,7 @@ const string TextBuddy::MESSAGE_DELETED = "deleted from %s: \"%s\"";
 const string TextBuddy::MESSAGE_CLEARED = "all content deleted from %s";
 const string TextBuddy::MESSAGE_SORTED = "all content in %s sorted alphabetically";
 const string TextBuddy::MESSAGE_LINE_NOT_FOUND = "line not found in %s";
+const string TextBuddy::MESSAGE_SEARCH_FOUND = "found %d results in %s";
 const string TextBuddy::MESSAGE_INVALID_FORMAT = "invalid command format: %s\n1. add <text>\n2. delete <line number>\n3. clear\n4. display\n5. sort\n6. search <word(s)>\n7. exit\n";
 const string TextBuddy::MESSAGE_PROGRAM_TERMINATION = "Enter any key to exit: ";
 const string TextBuddy::MESSAGE_WELCOME = "Welcome to TextBuddy. %s is ready for use";
@@ -85,7 +86,7 @@ string TextBuddy::executeCommand(string filename, string userCommand) {
 
 	switch (command) {
 	case ADD_LINE:
-		if (checkValidInput(content)) {
+		if (checkInvalidInput(content)) {
 			sprintf_s(buffer, MESSAGE_INVALID_FORMAT.c_str(), getFirstWord(userCommand).c_str());
 			return buffer;
 		}
@@ -95,7 +96,7 @@ string TextBuddy::executeCommand(string filename, string userCommand) {
 		return displayAll(filename);
 
 	case DELETE_LINE:
-		if (checkValidInput(content)) {
+		if (checkInvalidInput(content)) {
 			sprintf_s(buffer, MESSAGE_INVALID_FORMAT.c_str(), command);
 			return buffer;
 		}
@@ -108,7 +109,7 @@ string TextBuddy::executeCommand(string filename, string userCommand) {
 		return sortAlphabetical(filename);
 
 	case SEARCH:
-		if (checkValidInput(content)) {
+		if (checkInvalidInput(content)) {
 			sprintf_s(buffer, MESSAGE_INVALID_FORMAT.c_str(), command);
 			return buffer;
 		}
@@ -151,7 +152,7 @@ string TextBuddy::displayAll(string filename) {
 	file.open(filename);
 
 	for (i = 1; getline(file, line); i++) {
-		cout << i << ". " << line << endl;
+		printLine(i, line);
 	}
 
 	if (i == 1) {
@@ -197,7 +198,14 @@ string TextBuddy::sortAlphabetical(string filename) {
 
 // returns lines that contain the search word
 string TextBuddy::searchFile(string filename, string content) {
+	int i;
 
+	for (i = 1; i <= (int)store.size(); i++) {
+		printLine(i, searchLine(filename, content, to_string(i)));
+	}
+
+	sprintf_s(buffer, MESSAGE_SEARCH_FOUND.c_str(), i, filename.c_str());
+	
 	return buffer;
 }
 
@@ -255,10 +263,10 @@ void TextBuddy::writeToFile(string filename) {
 
 // returns iterator of line number requested (0 <= line number < n)
 vector<string>::iterator TextBuddy::getLineIter(string filename, string content) {
-	int iter = 0;
+	int iter = 1;
 
 	for (vector<string>::iterator i = store.begin(); i != store.end(); i++) {
-		if (iter == stoi(content) - 1) {
+		if (iter == stoi(content)) {
 			return i;
 		}
 		else
@@ -300,7 +308,7 @@ TextBuddy::CommandType TextBuddy::determineCommandType(string command) {
 		return CommandType::INVALID;
 }
 
-bool TextBuddy::checkValidInput(string content) {
+bool TextBuddy::checkInvalidInput(string content) {
 	if (content == "") {
 		return true;
 	}
@@ -327,6 +335,10 @@ string TextBuddy::removeFirstWord(string command){
 
 string TextBuddy::getFirstWord(string command){
 	return command.substr(0, command.find(' '));
+}
+
+void TextBuddy::printLine(int i, string line) {
+	cout << i << ". " << line << endl;
 }
 
 void TextBuddy::showToUser(string text) {

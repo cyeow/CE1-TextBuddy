@@ -47,6 +47,7 @@ private:
 	static const string MESSAGE_DELETED;
 	static const string MESSAGE_CLEARED;
 	static const string MESSAGE_SORTED;
+	static const string MESSAGE_SEARCH_FOUND;
 	static const string MESSAGE_LINE_NOT_FOUND;
 	static const string MESSAGE_INVALID_FORMAT;
 	static const string MESSAGE_PROGRAM_TERMINATION;
@@ -72,10 +73,11 @@ private:
 	static void writeToFile(string filename);
 	static vector<string>::iterator getLineIter(string filename, string content);
 	static CommandType determineCommandType(string command);
-	static bool checkValidInput(string content);
+	static bool checkInvalidInput(string content);
 	static void checkCLI(int argc);
 	static string removeFirstWord(string command);
 	static string getFirstWord(string command);
+	static void printLine(int i, string line);
 	static void showToUser(string text);
 
 };
